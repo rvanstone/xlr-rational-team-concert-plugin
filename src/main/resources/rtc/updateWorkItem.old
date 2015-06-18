@@ -1,0 +1,112 @@
+import urllib,sys
+from xml.dom.minidom import parse, parseString
+import xml.etree.ElementTree as ET
+from exceptions import Exception
+
+if rtcServer is None:
+  print "No RTC server provided."
+  sys.exit(1)
+
+# Check we have a project set somewhere (can be over-ridden or set Server level)
+if rtcProject is None:
+  if rtcServer['rtcProject'] is None:
+    print "No RTC Project provided"
+    sys.exit(1)
+  else:
+    rtcProject = rtcServer['rtcProject']
+
+rtcURL = rtcServer['url']
+if rtcURL.endswith('/'):
+  rtcURL = rtcURL[:len(rtcURL)-1]
+
+request = HttpRequest(rtcServer, username, password)
+
+headers = {'Content-type': 'application/rdf+xml', 'OSLC-Core-Version' : '2.0', 'Accept' : 'application/xml'}
+context = 'oslc/workitems/catalog'
+     
+resp = request.get( context , headers=headers)
+
+if resp.isSuccessful():
+
+  ServiceProviderCatalogPath='{http://open-services.net/ns/core#}ServiceProviderCatalog'
+  serviceProviderPath='{http://open-services.net/ns/core#}serviceProvider'
+  ServiceProviderPath='{http://open-services.net/ns/core#}ServiceProvider'
+  detailsPath='{http://open-services.net/ns/core#}details'
+  resourcePath='{http://www.w3.org/1999/02/22-rdf-syntax-ns#}resource'
+  titlePath='{http://purl.org/dc/terms/}title'
+  aboutPath='{http://www.w3.org/1999/02/22-rdf-syntax-ns#}about'
+
+  print "We have a response\n"
+  serviceURL = ""
+  # Register our namespaces for parsing - this requires the module's register_namespace() method!!!
+  # Python 2.7!!!
+  #ET.register_namespace("rdf","http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+  #ET.register_namespace("dcterms","http://purl.org/dc/terms/")
+  #ET.register_namespace("jfs_proc","http://jazz.net/xmlns/prod/jazz/process/1.0/")
+  #ET.register_namespace("oslc","http://open-services.net/ns/core#")
+
+  # Parse the response
+  root = ET.fromstring(resp.response)
+  
+  # Traverse the tree to find our own context's URL
+  for ServiceProviderCatalog in root.findall(ServiceProviderCatalogPath):
+    for serviceProvider in ServiceProviderCatalog.findall(serviceProviderPath):
+      print "we have a service provider"
+      for ServiceProvider in serviceProvider.findall(ServiceProviderPath):
+        #print "we have a SERVICEPROVIDER element %s" %(ServiceProvider.text)
+        #print "The SERVICEPROVIDER has the following attributes ", ServiceProvider.attrib
+        for tags in ServiceProvider.getiterator('{http://purl.org/dc/terms/}title'):
+        #  print tags.text
+          if rtcProject in tags.text:
+            serviceURL = ServiceProvider.attrib.get(aboutPath)
+            print "Finally got the serviceURL",serviceURL
+            break
+
+
+
+
+  print "We have our service URL = ",serviceURL
+else:
+  print "Something went wrong with our HTTPRequest\n"
+  print resp.errorDump()
+  sys.exit(1)
+
+
+       
+# Now we do the same thing with the work items - we have our services we need the simple Query URL
+
+headers = {'Content-type': 'application/rdf+xml', 'OSLC-Core-Version' : '2.0', 'Accept' : 'application/xml'}
+# The context is just the bit after the Jazz Team Server URL
+context = serviceURL[len(rtcURL):]
+context = context[:-len('/services.xml')]
+print "Context is ",context
+
+resp = request.get( context , headers=headers)
+
+if resp.isSuccessful():
+  print "We have a response\n"
+
+  ServiceProviderCatalogPath='{http://open-services.net/ns/core#}ServiceProviderCatalog'
+  serviceProviderPath='{http://open-services.net/ns/core#}serviceProvider'
+  ServiceProviderPath='{http://open-services.net/ns/core#}ServiceProvider'
+  titlePath='{http://purl.org/dc/terms/}title'
+
+  root = ET.fromstring(resp.response)
+  
+  workItemURL = ""
+  
+  # Traverse the tree to find the url for querying workitems
+  ns = {"rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        "rdfs":"http://www.w3.org/2000/01/rdf-schema#"}
+
+  memberTag = "{%s}member" % ns["rdfs"]
+  resourceAttr = "{%s}resource" % ns["rdf"]
+
+  result = [e.attrib[resourceAttr] for e in root.getiterator(memberTag) if e.attrib[resourceAttr].endswith(workItemID)]
+  print result
+  
+else:
+    print "Failed to access RTC"
+    resp.errorDump()
+    sys.exit(1)
+

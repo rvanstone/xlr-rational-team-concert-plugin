@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
+    FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
+
+-->
+<synthetic xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd" xmlns="http://www.xebialabs.com/deployit/synthetic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+    <type type="rtc.UpdateWorkItemTask" extends="xlrelease.PythonScript" description="Updates a work item's state">
+        <property name="scriptLocation" default="rtc/updateWorkItem.py" hidden="true" />
+        <property name="iconLocation" default="rtc/rtc.png" hidden="true" />
+
+        <property name="rtcServer" category="input" label="Server" referenced-type="rtc.Server" kind="ci"/>
+        <property name="username" category="input"/>
+        <property name="password" password="true" category="input"/>
+        <property name="rtcProject" category="input" label="RTC Project" required="true"/>
+        <property name="workItemID" category="input" required="true"/>
+        <property name="newState" category="input" default="true" />
+        <property name="updateComment" category="input" default="WorkItem updated by XLR" />
+
+        <property name="response" category="output"/>
+    </type>
+
+    <type type="rtc.Server" extends="configuration.HttpConnection"/>
+    
+
+
+</synthetic>
