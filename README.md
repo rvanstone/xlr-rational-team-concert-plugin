@@ -16,4 +16,4 @@ For XL Release version 4.5.x you'll need at least version 1.5 of the plugin.
   * `rtcServer`: The CI created to connect to your Rational Team Concert Jazz Team Server (`CI`) 
   * `rtcProject`: The Rational Team Concert project to interact with (`string`)
   * `workItemID`: The ID of the work item to update (`string`)
-  * `rtcComment`: The comment associated with this update (`string`)
+  * `updateComment`: The comment associated with this update (`string`)
