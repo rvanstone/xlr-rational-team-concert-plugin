@@ -31,3 +31,13 @@ Creating the RTC plugin is not without its challenges.  Some resources I have fo
 
 * https://jazz.net/wiki/bin/view/Main/ResourceOrientedWorkItemAPIv2 - the steps to arrive at a workitem
 * https://rsjazz.wordpress.com/2012/11/26/manipulating-work-item-states/ - some useful observations about workflow
+
+## To Do ##
+This first draft simply updates a workitem status. There are a couple of shortcuts that have been taken. According to many of the sources the best approach is to work through the process as follows
+1. Locate the service providers catalog from root services
+2. Locate the service descriptor from service provider
+3. Locate the workitem query url from the descriptor
+
+Modifying the state of a work item can not be done directly. It has to be done via an action. Workflows (and hence actions) vary between implementations (they are customizable).  As such it may not be possible to reach the desired state from the current state.  This needs to be coded for
+
+Error handling needs to be implemented
