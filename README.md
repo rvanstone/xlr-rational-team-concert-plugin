@@ -9,7 +9,6 @@ See the **[XL Release Documentation](https://docs.xebialabs.com/xl-release/index
 The xlr-rational-team-concert-plugin is an XL Release plugin that allows you to:
   * programmatically update Rational Team Concert Workitems
 
-For XL Release version 4.5.x you'll need at least version 1.5 of the plugin.
 
 ## Tasks ##
 + Update Workitem Status
@@ -17,3 +16,13 @@ For XL Release version 4.5.x you'll need at least version 1.5 of the plugin.
   * `rtcProject`: The Rational Team Concert project to interact with (`string`)
   * `workItemID`: The ID of the work item to update (`string`)
   * `updateComment`: The comment associated with this update (`string`)
+
+## Usage ##
+
+This plugin interacts with a JazzTeamServer instance, therefore the first thing you need to do is create a Configuration Item in XL Release to connect to that instance.  This is done in the Configuration screen of XL Release.
+
+Once done you can add a task (listed above) to your release template and complete the fields.
+
+## Notes and Tips ##
+
+For experimentation with Rational Team Concert IBM kindly provide a sandpit environment from this location - https://jazz.net/products/sandbox/  You can then use any instances you create with this plugin.
