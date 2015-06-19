@@ -23,6 +23,11 @@ This plugin interacts with a JazzTeamServer instance, therefore the first thing 
 
 Once done you can add a task (listed above) to your release template and complete the fields.
 
-## Notes and Tips ##
+## Notes and Tips for Developers ##
 
 For experimentation with Rational Team Concert IBM kindly provide a sandpit environment from this location - https://jazz.net/products/sandbox/  You can then use any instances you create with this plugin.
+
+Creating the RTC plugin is not without its challenges.  Some resources I have found useful are listed below
+
+* https://jazz.net/wiki/bin/view/Main/ResourceOrientedWorkItemAPIv2 - the steps to arrive at a workitem
+* https://rsjazz.wordpress.com/2012/11/26/manipulating-work-item-states/ - some useful observations about workflow
