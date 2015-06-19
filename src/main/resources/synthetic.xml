@@ -17,7 +17,7 @@
         <property name="password" password="true" category="input"/>
         <property name="rtcProject" category="input" label="RTC Project" required="true"/>
         <property name="workItemID" category="input" required="true"/>
-        <property name="newState" category="input" default="true" />
+        <property name="newState" category="input" default="[InProgress|Done]" />
         <property name="updateComment" category="input" default="WorkItem updated by XLR" />
 
         <property name="response" category="output"/>
