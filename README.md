@@ -34,6 +34,7 @@ Creating the RTC plugin is not without its challenges.  Some resources I have fo
 
 ## To Do ##
 This first draft simply updates a workitem status. There are a couple of shortcuts that have been taken. According to many of the sources the best approach is to work through the process as follows
+
 1. Locate the service providers catalog from root services
 2. Locate the service descriptor from service provider
 3. Locate the workitem query url from the descriptor
